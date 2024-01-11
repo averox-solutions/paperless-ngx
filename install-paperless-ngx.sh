@@ -56,8 +56,8 @@ if ! command -v docker &> /dev/null ; then
 	exit 1
 fi
 
-if ! command -v docker compose &> /dev/null ; then
-	echo "docker compose executable not found. Is docker compose installed?"
+if ! command -v docker-compose &> /dev/null ; then
+	echo "docker-compose executable not found. Is docker-compose installed?"
 	exit 1
 fi
 
@@ -377,16 +377,16 @@ if [ "$l1" -eq "$l2" ] ; then
 fi
 
 
-docker compose pull
+docker-compose pull
 
 if [ "$DATABASE_BACKEND" == "postgres" ] || [ "$DATABASE_BACKEND" == "mariadb" ] ; then
 	echo "Starting DB first for initialization"
-	docker compose up --detach db
+	docker-compose up --detach db
 	# hopefully enough time for even the slower systems
 	sleep 15
-	docker compose stop
+	docker-compose stop
 fi
 
-docker compose run --rm -e DJANGO_SUPERUSER_PASSWORD="$PASSWORD" webserver createsuperuser --noinput --username "$USERNAME" --email "$EMAIL"
+docker-compose run --rm -e DJANGO_SUPERUSER_PASSWORD="$PASSWORD" webserver createsuperuser --noinput --username "$USERNAME" --email "$EMAIL"
 
-docker compose up --detach
+docker-compose up --detach
